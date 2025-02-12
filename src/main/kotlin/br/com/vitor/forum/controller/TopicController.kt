@@ -3,6 +3,7 @@ package br.com.vitor.forum.controller
 import br.com.vitor.forum.dto.form.TopicForm
 import br.com.vitor.forum.dto.view.TopicView
 import br.com.vitor.forum.service.TopicService
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,7 +25,7 @@ class TopicController (private val service: TopicService) {
     }
 
     @PostMapping
-    fun register(@RequestBody dto: TopicForm) {
+    fun register(@RequestBody @Valid dto: TopicForm) {
         service.register(dto);
     }
 
