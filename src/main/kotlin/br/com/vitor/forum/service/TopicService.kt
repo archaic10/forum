@@ -3,6 +3,7 @@ package br.com.vitor.forum.service
 import br.com.vitor.forum.dto.form.TopicForm
 import br.com.vitor.forum.dto.form.UpdateTopicForm
 import br.com.vitor.forum.dto.view.TopicView
+import br.com.vitor.forum.exception.NotFoundException
 import br.com.vitor.forum.mapper.view.TopicViewMapper
 import br.com.vitor.forum.mapper.form.TopicFormMapper
 import br.com.vitor.forum.model.Topic
@@ -15,7 +16,7 @@ class TopicService(
     private var topics: List<Topic> = ArrayList(),
     private val topicViewMapper: TopicViewMapper,
     private val topicFormMapper: TopicFormMapper,
-    private val curseService: CurseService,
+    private val notFoundMessage: String = "Topic not Found!"
 ) {
 
 
@@ -26,7 +27,7 @@ class TopicService(
     fun searchById(id: Long): TopicView {
         val topic = topics.stream().filter{ t ->
             t.id == id
-        }.findFirst().get();
+        }.findFirst().orElseThrow{NotFoundException(notFoundMessage)};
 
         return topicViewMapper.map(topic)
     }
@@ -60,7 +61,7 @@ class TopicService(
     fun delete(id: Long) {
         val topic = topics.stream().filter{ t ->
             t.id == id
-        }.findFirst().get()
+        }.findFirst().orElseThrow{NotFoundException(notFoundMessage)}
         topics = topics.minus(topic)
     }
 }
